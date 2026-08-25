@@ -110,7 +110,21 @@ export default function App() {
 
   return (
   <Layout>
-        <div className="flex items-center gap-4 mb-6">
+
+    {/* TMDB Search */}
+    <SearchBar onSearch={setSearchTerm} />
+
+    <SearchResults
+      results={results}
+      onAdd={handleAddFromSearch}
+      isLoading={isLoading}
+      error={error}
+    />
+
+    <hr className="my-6" />
+
+    {/* Existing Watchlist */}
+    <div className="flex items-center gap-4 mb-6">
       <SummaryBar movies={movies} />
 
       <button
@@ -119,8 +133,7 @@ export default function App() {
       >
         Clear All
       </button>
-      </div>
-
+    </div>
 
     <div className="mb-6">
       <h1 className="text-3xl font-bold">My Watchlist</h1>
@@ -140,7 +153,9 @@ export default function App() {
       movies={visibleMovies}
       onToggleWatched={handleToggleWatched}
     />
+
   </Layout>
 );
+
 
 }
