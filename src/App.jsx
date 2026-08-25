@@ -5,6 +5,9 @@ import initialMovies from "./data/movies";
 import AddMovieForm from "./components/AddMovieForm";
 import FilterBar from "./components/FilterBar";
 import SummaryBar from "./components/SummaryBar";
+import { searchMovies, toWatchlistMovie } from "./api/tmdb";
+import SearchBar from "./components/SearchBar";
+import SearchResults from "./components/SearchResults";
 
 export default function App() {
 
@@ -18,6 +21,12 @@ export default function App() {
   return localStorage.getItem("filter") || "all";
   });
 
+    const [results, setResults] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+
   useEffect(() => {
   localStorage.setItem("movies", JSON.stringify(movies));
   }, [movies]);
@@ -30,6 +39,38 @@ export default function App() {
   localStorage.setItem("filter", filter);
   }, [filter]);
 
+  useEffect(() => {
+  if (!searchTerm) return;
+
+  let isCancelled = false;
+
+  const fetchResults = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const movies = await searchMovies(searchTerm);
+
+      if (!isCancelled) {
+        setResults(movies);
+      }
+    } catch (err) {
+      if (!isCancelled) {
+        setError("Failed to fetch movies. Try again.");
+      }
+    } finally {
+      if (!isCancelled) {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  fetchResults();
+
+  return () => {
+    isCancelled = true;
+  };
+  }, [searchTerm]);
 
 
   const handleToggleWatched = (id) => {
@@ -45,6 +86,15 @@ export default function App() {
   const handleAddMovie = (newMovie) => {
     setMovies([...movies, newMovie]);
   };
+
+  const handleAddFromSearch = (tmdbMovie) => {
+  if (movies.some((m) => m.id === tmdbMovie.id)) return;
+
+  const watchlistMovie = toWatchlistMovie(tmdbMovie);
+
+  setMovies([...movies, watchlistMovie]);
+  };
+
 
   const handleClearAll = () => {
   if (confirm("Clear your entire watchlist? This cannot be undone.")) {
