@@ -7,15 +7,22 @@ import FilterBar from "./components/FilterBar";
 import SummaryBar from "./components/SummaryBar";
 
 export default function App() {
+
   const [movies, setMovies] = useState(() => {
     const saved = localStorage.getItem("movies");
 
     return saved ? JSON.parse(saved) : initialMovies;
   });
+
   const [filter, setFilter] = useState("all");
   useEffect(() => {
   localStorage.setItem("movies", JSON.stringify(movies));
   }, [movies]);
+
+  useEffect(() => {
+  document.title = `Movie Watchlist (${movies.length})`;
+  }, [movies.length]);
+
 
   const handleToggleWatched = (id) => {
     setMovies((movies) =>
