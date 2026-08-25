@@ -46,6 +46,12 @@ export default function App() {
     setMovies([...movies, newMovie]);
   };
 
+  const handleClearAll = () => {
+  if (confirm("Clear your entire watchlist? This cannot be undone.")) {
+    setMovies([]);
+  }
+  };
+
   const visibleMovies = movies.filter((movie) => {
     if (filter === "watched") return movie.watched;
     if (filter === "unwatched") return !movie.watched;
@@ -54,7 +60,17 @@ export default function App() {
 
   return (
   <Layout>
-    <SummaryBar movies={movies} />
+        <div className="flex items-center gap-4 mb-6">
+      <SummaryBar movies={movies} />
+
+      <button
+        className="btn btn-error btn-sm"
+        onClick={handleClearAll}
+      >
+        Clear All
+      </button>
+      </div>
+
 
     <div className="mb-6">
       <h1 className="text-3xl font-bold">My Watchlist</h1>
