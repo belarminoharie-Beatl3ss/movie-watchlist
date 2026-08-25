@@ -1,19 +1,21 @@
 import MovieCard from "./MovieCard";
 
-export default function MovieList({ movies }) {
+export default function MovieList({ movies, onToggleWatched }) {
   // TODO: destructure props — movies
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {movies.map((movie) => (
         <MovieCard
-          key={movie.id}
-          title={movie.title}
-          poster={movie.poster}
-          year={movie.year}
-          genre={movie.genre}
-          rating={movie.rating}
-          watched={movie.watched}
+        key={movie.id}
+        id={movie.id}
+        title={movie.title}
+        poster={movie.poster}
+        year={movie.year}
+        genre={movie.genre}
+        rating={movie.rating}
+        watched={movie.watched}
+        onToggleWatched={onToggleWatched}
         />
       ))}
     </div>

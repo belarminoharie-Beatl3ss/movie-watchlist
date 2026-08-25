@@ -1,4 +1,4 @@
-export default function MovieCard({ title, poster, year, genre, rating, watched }) {
+export default function MovieCard({ id, title, poster, year, genre, rating, watched, onToggleWatched }) {
   // TODO: destructure props — title, poster, year, genre, rating, watched
 
   return (
@@ -24,11 +24,13 @@ export default function MovieCard({ title, poster, year, genre, rating, watched 
           ⭐ {rating}
         </p>
         <div className="card-actions justify-end mt-2">
-          {watched ? (
-            <span className="badge badge-success">Watched ✓</span>
-          ) : (
-            <span className="badge badge-ghost">Unwatched</span>
-          )}
+         <button
+            onClick={() => onToggleWatched(id)}
+            className={watched ? "badge badge-success" : "badge badge-ghost"}
+          >
+            {watched ? "Watched ✓" : "Unwatched"}
+          </button>
+
         </div>
       </div>
     </div>
